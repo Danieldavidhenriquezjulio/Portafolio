@@ -1,0 +1,30 @@
+---
+import Layout from "../layouts/Layout.astro";
+import BootScreen from "../components/BootScreen.astro";
+import Sidebar from "../components/Sidebar.astro";
+import Hero from "../components/Hero.astro";
+import Skills from "../components/Skills.astro";
+import Projects from "../components/Projects.astro";
+import Experience from "../components/Experience.astro";
+import About from "../components/About.astro";
+import Contact from "../components/Contact.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<Layout title="ORBITAL DEVELOPER CONSOLE | DANIEL HENRIQUEZ">
+  <BootScreen />
+
+  <div class="app-container">
+    <Sidebar />
+
+    <main class="main-content">
+      <Hero />
+      <Skills />
+      <Projects />
+      <Experience />
+      <About />
+      <Contact />
+      <Footer />
+    </main>
+  </div>
+</Layout>

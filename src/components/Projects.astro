@@ -1,0 +1,101 @@
+---
+import { projects } from "../data/projects.js";
+---
+
+<section id="projects">
+  <div class="section-header">
+    <div class="tag orbitron">[ MISSION DATABASE ]</div>
+    <h2 class="orbitron">ACTIVE & COMPLETED OPERATIONS</h2>
+  </div>
+
+  <div class="projects-grid">
+    {
+      projects.map((proj) => (
+        <div class="glass-panel project-card">
+          <div class="project-header">
+            <div
+              class={proj.primary ? "project-icon primary" : "project-icon"}
+            >
+              {proj.logo ? (
+                <img src={proj.logo} alt={proj.name} style="width: 100%; height: 100%; object-fit: contain; border-radius: 4px;" />
+              ) : (
+                <Fragment set:html={proj.icon || '<i class="ti ti-folder"></i>'} />
+              )}
+            </div>
+            <div class="project-title-wrapper">
+              <h3
+                class="project-title orbitron"
+                style={
+                  proj.primary
+                    ? "color: var(--cyan); text-shadow: 0 0 10px rgba(0,217,255,0.5);"
+                    : ""
+                }
+              >
+                {proj.name}
+              </h3>
+            </div>
+          </div>
+          <div class="project-meta">
+            <div class="meta-row">
+              <span>CLASS:</span>
+              <span style={proj.primary ? "color: var(--purple);" : ""}>
+                {proj.class}
+              </span>
+            </div>
+            <div class="meta-row">
+              <span>STATUS:</span>
+              <span>
+                {proj.status}
+                <span
+                  class="status-dot"
+                  style={
+                    proj.primary
+                      ? "background: var(--purple); animation: pulse-purple 2s infinite;"
+                      : ""
+                  }
+                />
+              </span>
+            </div>
+            <div class="meta-row">
+              <span>SECTOR:</span>
+              <span>{proj.sector}</span>
+            </div>
+          </div>
+
+          <div class="project-tech-tags">
+            {proj.tech.split("·").map((t) => (
+              <span class="tech-tag">{t.trim()}</span>
+            ))}
+          </div>
+
+          <p class="project-desc">{proj.desc}</p>
+          <div class="project-actions">
+            <a href={`/project/${proj.id}`} class="btn btn-cyan">
+              <i class="ti ti-info-circle" /> [ DETAILS ]
+            </a>
+            {proj.viewUrl && proj.viewUrl !== "" && proj.viewUrl !== "#" && (
+              <a
+                href={proj.viewUrl}
+                class="btn btn-cyan"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <i class="ti ti-satellite" /> [ LIVE DATA ]
+              </a>
+            )}
+            {proj.codeUrl && proj.codeUrl !== "" && proj.codeUrl !== "#" && (
+              <a
+                href={proj.codeUrl}
+                class="btn btn-purple"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <i class="ti ti-code" /> [ SOURCE ]
+              </a>
+            )}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>

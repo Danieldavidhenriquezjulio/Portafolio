@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORBITAL DEVELOPER CONSOLE | DANIEL HENRIQUEZ</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    
+    <style>
+        :root {
+            --bg-deep: #050816;
+            --bg-surface: #0B1020;
+            --cyan: #00D9FF;
+            --purple: #7B61FF;
+            --text-primary: #E2E8F0;
+            --text-muted: rgba(226, 232, 240, 0.45);
+        }
+
+        /* RESET & BASE */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-primary);
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+            letter-spacing: 0.5px;
+        }
+
+        /* TYPOGRAPHY */
+        h1, h2, h3, h4, h5, h6, .orbitron, .nav-tooltip, .btn, .label {
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+        }
+
+        /* BACKGROUND EFFECTS */
+        #stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            pointer-events: none;
+        }
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle linear infinite;
+        }
+
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: 
+                linear-gradient(rgba(0, 217, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 217, 255, 0.04) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 10vh;
+            background: linear-gradient(to bottom, transparent, rgba(0, 217, 255, 0.08), transparent);
+            animation: scan 5s linear infinite;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        /* LAYOUT */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR NAV */
+        .sidebar {
+            width: 56px;
+            background: rgba(11, 16, 32, 0.85);
+            backdrop-filter: blur(12px);
+            border-right: 1px solid rgba(0, 217, 255, 0.12);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            position: relative;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        .nav-btn i {
+            transition: all 0.3s ease;
+        }
+        .nav-btn:hover, .nav-btn.active {
+            color: var(--cyan);
+        }
+        .nav-btn.active i {
+            filter: drop-shadow(0 0 8px rgba(0, 217, 255, 0.6));
+        }
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: var(--cyan);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+            transform-origin: left;
+            box-shadow: 2px 0 8px rgba(0, 217, 255, 0.5);
+        }
+        .nav-btn.active::before {
+            transform: scaleY(1);
+        }
+        .nav-tooltip {
+            position: absolute;
+            left: 70px;
+            background: var(--bg-surface);
+            border: 1px solid var(--cyan);
+            padding: 6px 12px;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: var(--cyan);
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+        }
+        .nav-btn:hover .nav-tooltip {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            margin-left: 56px;
+            flex-grow: 1;
+            width: calc(100% - 56px);
+        }
+
+        section {
+            min-height: 100vh;
+            padding: 80px 5%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .section-header {
+            margin-bottom: 60px;
+        }
+        .section-header .tag {
+            color: var(--cyan);
+            font-size: 14px;
+            letter-spacing: 4px;
+        }
+        .section-header h2 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-top: 8px;
+        }
+
+        /* GLASS PANEL COMPONENT */
+        .glass-panel {
+            background: rgba(11, 16, 32, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 217, 255, 0.12);
+            position: relative;
+            padding: 24px;
+        }
+        /* Corner brackets */
+        .glass-panel::before, .glass-panel::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-color: var(--cyan);
+            border-style: solid;
+            transition: all 0.3s ease;
+        }
+        .glass-panel::before {
+            top: -1px; left: -1px;
+            border-width: 2px 0 0 2px;
+        }
+        .glass-panel::after {
+            bottom: -1px; right: -1px;
+            border-width: 0 2px 2px 0;
+        }
+
+        /* BUTTONS */
+        .btn {
+            background: transparent;
+            color: var(--text-primary);
+            padding: 12px 24px;
+            font-size: 12px;
+            letter-spacing: 3px;
+            border: 1px solid;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-cyan {
+            border-color: var(--cyan);
+        }
+        .btn-cyan:hover {
+            background: rgba(0, 217, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 217, 255, 0.3);
+            color: var(--cyan);
+        }
+        .btn-purple {
+            border-color: var(--purple);
+        }
+        .btn-purple:hover {
+            background: rgba(123, 97, 255, 0.1);
+            box-shadow: 0 0 15px rgba(123, 97, 255, 0.3);
+            color: var(--purple);
+        }
+
+        /* BOOT SEQUENCE */
+        #boot-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: var(--bg-deep);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            padding: 40px;
+            font-family: 'Orbitron', monospace;
+            font-size: 16px;
+            color: var(--cyan);
+            letter-spacing: 2px;
+            transition: opacity 1s ease;
+        }
+        .boot-line {
+            opacity: 0;
+            margin-bottom: 12px;
+        }
+
+        /* HERO SECTION */
+        #hero {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .hero-left {
+            flex: 1;
+            z-index: 2;
+        }
+        .hero-left h1 {
+            font-size: 48px;
+            font-weight: 900;
+            text-shadow: 0 0 20px rgba(0, 217, 255, 0.4);
+            margin-bottom: 8px;
+            letter-spacing: 4px;
+        }
+        .hero-role {
+            font-size: 11px;
+            color: var(--cyan);
+            letter-spacing: 6px;
+            margin-bottom: 4px;
+        }
+        .hero-stack {
+            font-size: 9px;
+            color: var(--purple);
+            letter-spacing: 5px;
+            margin-bottom: 32px;
+        }
+        .status-indicators {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 40px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+        }
+        .status-dot {
+            display: inline-block;
+            width: 8px; height: 8px;
+            background: var(--cyan);
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse-cyan 2s infinite;
+        }
+        .hero-ctas {
+            display: flex;
+            gap: 16px;
+        }
+        .hero-socials {
+            display: flex;
+            gap: 24px;
+            margin-top: 32px;
+        }
+        .hero-socials a {
+            color: var(--text-muted);
+            font-size: 24px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        .hero-socials a:hover {
+            color: var(--cyan);
+            filter: drop-shadow(0 0 10px rgba(0, 217, 255, 0.6));
+            transform: translateY(-2px);
+        }
+
+        /* ORBITAL ANIMATION */
+        .hero-right {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .orbital-core-node {
+            width: 20px; height: 20px;
+            background: var(--cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 30px var(--cyan);
+            z-index: 10;
+        }
+        .ring {
+            position: absolute;
+            border: 1px dashed rgba(0, 217, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+        }
+        .ring-1 { width: 150px; height: 150px; animation: spin-right 10s linear infinite; }
+        .ring-2 { width: 250px; height: 250px; animation: spin-left 15s linear infinite; }
+        .ring-3 { width: 350px; height: 350px; animation: spin-right 20s linear infinite; border-color: rgba(123, 97, 255, 0.3); }
+        .satellite {
+            width: 8px; height: 8px;
+            background: var(--cyan);
+            border-radius: 50%;
+            position: absolute;
+            top: -4px;
+            box-shadow: 0 0 10px var(--cyan);
+        }
+        .ring-3 .satellite {
+            background: var(--purple);
+            box-shadow: 0 0 10px var(--purple);
+        }
+
+        .footer-detail {
+            position: absolute;
+            bottom: 40px;
+            left: 5%;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 9px;
+            letter-spacing: 4px;
+            color: var(--text-muted);
+        }
+
+        /* SKILLS SECTION */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+        .skill-item {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            letter-spacing: 3px;
+        }
+        .skill-status {
+            font-size: 10px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .skill-bar-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(226, 232, 240, 0.1);
+            position: relative;
+        }
+        .skill-bar-fill {
+            height: 100%;
+            background: var(--cyan);
+            width: 0%;
+            transition: width 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            box-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+        }
+        .skill-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .skill-item.top-tier .skill-bar-fill {
+            background: var(--purple);
+            box-shadow: 0 0 10px rgba(123, 97, 255, 0.5);
+        }
+        .skill-item.top-tier .status-dot {
+            background: var(--purple);
+            animation: pulse-purple 2s infinite;
+        }
+
+        /* PROJECTS SECTION */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+        .project-card {
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+        .project-card:hover {
+            transform: scale(1.02);
+            border-color: rgba(0, 217, 255, 0.5);
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.1);
+        }
+        .project-card:hover::before, .project-card:hover::after {
+            border-color: var(--cyan);
+            width: 24px; height: 24px;
+        }
+        .project-title {
+            color: var(--cyan);
+            font-size: 16px;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+        .project-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 24px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+        }
+        .meta-row {
+            display: flex;
+            justify-content: space-between;
+        }
+        .project-desc {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            color: var(--text-primary);
+            flex-grow: 1;
+        }
+        .project-tech {
+            font-size: 12px;
+            color: var(--purple);
+            margin-bottom: 24px;
+            opacity: 0.7;
+        }
+        .project-actions {
+            display: flex;
+            gap: 12px;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+        .project-card:hover .project-actions {
+            opacity: 1;
+        }
+        .project-actions .btn {
+            padding: 8px 12px;
+            font-size: 10px;
+        }
+
+        /* AI ANALYSIS SECTION */
+        .ai-readout-panel {
+            max-width: 800px;
+            font-family: 'Space Grotesk', monospace;
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--text-primary);
+        }
+        .ai-line {
+            display: none;
+            margin-bottom: 8px;
+        }
+        .ai-line.visible {
+            display: block;
+        }
+        .ai-label {
+            color: var(--cyan);
+            display: inline-block;
+            width: 160px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            letter-spacing: 2px;
+        }
+        .ai-divider {
+            color: rgba(0, 217, 255, 0.3);
+            letter-spacing: -1px;
+            margin: 16px 0;
+        }
+        .ai-cursor {
+            display: inline-block;
+            width: 10px;
+            height: 15px;
+            background: var(--cyan);
+            animation: blink 1s step-end infinite;
+            vertical-align: middle;
+        }
+
+        /* CONTACT SECTION */
+        .transmission-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .contact-form {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .form-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .form-row label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            letter-spacing: 3px;
+            color: var(--cyan);
+        }
+        .form-row input, .form-row textarea {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(0, 217, 255, 0.3);
+            color: var(--text-primary);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 16px;
+            padding: 8px 0;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .form-row input:focus, .form-row textarea:focus {
+            border-bottom-color: var(--cyan);
+        }
+        .form-row input::before {
+            content: '[ ';
+            color: var(--text-muted);
+        }
+        .submit-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 16px;
+        }
+        .sys-msg {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            color: var(--cyan);
+            letter-spacing: 2px;
+            opacity: 0;
+        }
+        .social-links {
+            margin-top: 60px;
+            display: flex;
+            gap: 24px;
+        }
+        .social-links a {
+            color: var(--text-muted);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            letter-spacing: 3px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .social-links a:hover {
+            color: var(--cyan);
+        }
+
+        /* ANIMATIONS */
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        @keyframes scan {
+            0% { transform: translateY(-100vh); }
+            100% { transform: translateY(100vh); }
+        }
+        @keyframes pulse-cyan {
+            0% { box-shadow: 0 0 0 0 rgba(0, 217, 255, 0.7); }
+            70% { box-shadow: 0 0 0 6px rgba(0, 217, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 217, 255, 0); }
+        }
+        @keyframes pulse-purple {
+            0% { box-shadow: 0 0 0 0 rgba(123, 97, 255, 0.7); }
+            70% { box-shadow: 0 0 0 6px rgba(123, 97, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(123, 97, 255, 0); }
+        }
+        @keyframes spin-right { 100% { transform: rotate(360deg); } }
+        @keyframes spin-left { 100% { transform: rotate(-360deg); } }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .hero-right { display: none; } /* Hide orbital on smaller screens */
+            .projects-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .app-container { flex-direction: column; }
+            .sidebar {
+                width: 100%;
+                height: 60px;
+                top: auto;
+                bottom: 0;
+                flex-direction: row;
+                border-right: none;
+                border-top: 1px solid rgba(0, 217, 255, 0.12);
+            }
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                margin-bottom: 60px; /* Space for bottom nav */
+            }
+            .nav-btn { width: 20%; height: 100%; }
+            .nav-btn::before {
+                width: 100%; height: 3px; top: 0; left: 0; transform: scaleX(0);
+            }
+            .nav-btn.active::before { transform: scaleX(1); }
+            .nav-tooltip { display: none; }
+            
+            section { padding: 60px 5%; }
+            .skills-grid { grid-template-columns: 1fr; }
+            .projects-grid { grid-template-columns: 1fr; }
+            .status-indicators { flex-direction: column; gap: 12px; }
+            .footer-detail { display: none; }
+        }
+
+        /* ACCESSIBILITY: REDUCED MOTION */
+        @media (prefers-reduced-motion: reduce) {
+            *, ::before, ::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+            .scanline { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BOOT SEQUENCE -->
+    <div id="boot-screen">
+        <div>
+            <div class="boot-line" id="boot-1">INITIALIZING ORBITAL SYSTEM... <span style="float:right">[OK]</span></div>
+            <div class="boot-line" id="boot-2">LOADING DEVELOPER PROFILE... <span style="float:right">[OK]</span></div>
+            <div class="boot-line" id="boot-3">ESTABLISHING SECURE CONNECTION... <span style="float:right">[OK]</span></div>
+            <div class="boot-line" id="boot-4" style="color:var(--purple); margin-top: 20px;">ACCESS GRANTED</div>
+        </div>
+    </div>
+
+    <!-- BACKGROUND ELEMENTS -->
+    <div id="stars-container"></div>
+    <div class="grid-overlay"></div>
+    <div class="scanline"></div>
+
+    <div class="app-container">
+        <!-- SIDEBAR -->
+        <nav class="sidebar">
+            <button class="nav-btn active" data-target="hero" aria-label="Orbital Core">
+                <!-- Planet Icon -->
+                <i class="ti ti-planet" aria-hidden="true"></i>
+                <div class="nav-tooltip">ORBITAL CORE</div>
+            </button>
+            <button class="nav-btn" data-target="skills" aria-label="System Status">
+                <!-- CPU Icon -->
+                <i class="ti ti-layout-grid" aria-hidden="true"></i>
+                <div class="nav-tooltip">SYSTEM STATUS</div>
+            </button>
+            <button class="nav-btn" data-target="projects" aria-label="Mission Database">
+                <!-- Target/Mission Icon -->
+                <i class="ti ti-satellite" aria-hidden="true"></i>
+                <div class="nav-tooltip">MISSION DATABASE</div>
+            </button>
+            <button class="nav-btn" data-target="about" aria-label="AI Analysis">
+                <!-- Database Icon -->
+                <i class="ti ti-database" aria-hidden="true"></i>
+                <div class="nav-tooltip">AI ANALYSIS</div>
+            </button>
+            <button class="nav-btn" data-target="contact" aria-label="Transmission Center">
+                <!-- Antenna Icon -->
+                <i class="ti ti-antenna" aria-hidden="true"></i>
+                <div class="nav-tooltip">TRANSMISSION CENTER</div>
+            </button>
+        </nav>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            
+            <!-- SECTION 1: HERO -->
+            <section id="hero">
+                <div class="hero-left">
+                    <h2 class="hero-role">SYSTEMS ENGINEER</h2>
+                    <h3 class="hero-stack">FULL STACK DEVELOPER</h3>
+                    <h1 class="orbitron">DANIEL HENRIQUEZ</h1>
+                    
+                    <div class="status-indicators">
+                        <div><span class="status-dot"></span>SYSTEMS ONLINE</div>
+                        <div><span class="status-dot"></span>3 ACTIVE MISSIONS</div>
+                        <div><span class="status-dot"></span>CARTAGENA SECTOR</div>
+                    </div>
+
+                    <div class="hero-ctas">
+                        <a href="#projects" class="btn btn-cyan">[ EXPLORE MISSIONS ]</a>
+                        <a href="#contact" class="btn btn-purple">[ OPEN CHANNEL ]</a>
+                    </div>
+                    
+                    <div class="hero-socials">
+                        <a href="https://github.com/Danieldavidhenriquezjulio" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                            <i class="ti ti-brand-github"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/daniel-david-henriquez-julio-71327a310/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                            <i class="ti ti-brand-linkedin"></i>
+                        </a>
+                        <a href="mailto:danieldhj07@gmail.com" aria-label="Email">
+                            <i class="ti ti-mail"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="hero-right">
+                    <div class="orbital-core-node"></div>
+                    <div class="ring ring-1"><div class="satellite"></div></div>
+                    <div class="ring ring-2"><div class="satellite"></div></div>
+                    <div class="ring ring-3"><div class="satellite"></div></div>
+                </div>
+
+                <div class="footer-detail">
+                    10.3910° N · 75.4794° W · SECTOR DELTA-7
+                </div>
+            </section>
+
+            <!-- SECTION 2: SKILLS -->
+            <section id="skills">
+                <div class="section-header">
+                    <div class="tag orbitron">[ SYSTEM STATUS ]</div>
+                    <h2 class="orbitron">CORE TECHNOLOGY MATRIX</h2>
+                </div>
+                
+                <div class="skills-grid">
+                    <!-- Reactive to Scroll -->
+                    <div class="glass-panel skill-item top-tier">
+                        <div class="skill-header">
+                            <span>REACT</span>
+                            <span class="skill-status">ONLINE <span class="status-dot"></span></span>
+                        </div>
+                        <div class="skill-bar-container">
+                            <div class="skill-bar-fill" data-progress="92%"></div>
+                        </div>
+                        <div class="skill-desc">Frontend · UI Systems | 92%</div>
+                    </div>
+                    
+                    <div class="glass-panel skill-item">
+                        <div class="skill-header">
+                            <span>DJANGO</span>
+                            <span class="skill-status">ONLINE <span class="status-dot"></span></span>
+                        </div>
+                        <div class="skill-bar-container">
+                            <div class="skill-bar-fill" data-progress="88%"></div>
+                        </div>
+                        <div class="skill-desc">Backend · API Architecture | 88%</div>
+                    </div>
+
+                    <div class="glass-panel skill-item">
+                        <div class="skill-header">
+                            <span>NESTJS</span>
+                            <span class="skill-status">ONLINE <span class="status-dot"></span></span>
+                        </div>
+                        <div class="skill-bar-container">
+                            <div class="skill-bar-fill" data-progress="85%"></div>
+                        </div>
+                        <div class="skill-desc">Microservices · REST/WS | 85%</div>
+                    </div>
+
+                    <div class="glass-panel skill-item">
+                        <div class="skill-header">
+                            <span>FLUTTER</span>
+                            <span class="skill-status">ONLINE <span class="status-dot"></span></span>
+                        </div>
+                        <div class="skill-bar-container">
+                            <div class="skill-bar-fill" data-progress="80%"></div>
+                        </div>
+                        <div class="skill-desc">Cross-platform Mobile | 80%</div>
+                    </div>
+
+                    <div class="glass-panel skill-item top-tier">
+                        <div class="skill-header">
+                            <span>POSTGRESQL</span>
+                            <span class="skill-status">ONLINE <span class="status-dot"></span></span>
+                        </div>
+                        <div class="skill-bar-container">
+                            <div class="skill-bar-fill" data-progress="90%"></div>
+                        </div>
+                        <div class="skill-desc">Relational · Query Optimization | 90%</div>
+                    </div>
+
+                    <div class="glass-panel skill-item">
+                        <div class="skill-header">
+                            <span>DOCKER</span>
+                            <span class="skill-status">ONLINE <span class="status-dot"></span></span>
+                        </div>
+                        <div class="skill-bar-container">
+                            <div class="skill-bar-fill" data-progress="83%"></div>
+                        </div>
+                        <div class="skill-desc">Containers · DevOps | 83%</div>
+                    </div>
+
+                    <div class="glass-panel skill-item">
+                        <div class="skill-header">
+                            <span>REDIS</span>
+                            <span class="skill-status">ONLINE <span class="status-dot"></span></span>
+                        </div>
+                        <div class="skill-bar-container">
+                            <div class="skill-bar-fill" data-progress="75%"></div>
+                        </div>
+                        <div class="skill-desc">Caching · Pub/Sub | 75%</div>
+                    </div>
+                    
+                    <div class="glass-panel skill-item top-tier">
+                        <div class="skill-header">
+                            <span>NEXT.JS</span>
+                            <span class="skill-status">ONLINE <span class="status-dot"></span></span>
+                        </div>
+                        <div class="skill-bar-container">
+                            <div class="skill-bar-fill" data-progress="87%"></div>
+                        </div>
+                        <div class="skill-desc">SSR · Full Stack React | 87%</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: PROJECTS -->
+            <section id="projects">
+                <div class="section-header">
+                    <div class="tag orbitron">[ MISSION DATABASE ]</div>
+                    <h2 class="orbitron">ACTIVE & COMPLETED OPERATIONS</h2>
+                </div>
+
+                <div class="projects-grid">
+                    <!-- Project 1 -->
+                    <div class="glass-panel project-card">
+                        <h3 class="project-title orbitron">ALDEOR</h3>
+                        <div class="project-meta">
+                            <div class="meta-row"><span>CLASS:</span> <span>PRIMARY MISSION</span></div>
+                            <div class="meta-row"><span>STATUS:</span> <span>IN PROGRESS <span class="status-dot"></span></span></div>
+                            <div class="meta-row"><span>SECTOR:</span> <span>LATAM / COLOMBIA</span></div>
+                        </div>
+                        <div class="project-tech">NestJS · Next.js · PostgreSQL · Redis · BullMQ</div>
+                        <p class="project-desc">A multi-tenant restaurant management platform with real-time orders, DIAN electronic invoicing, and AI-powered inventory management.</p>
+                        <div class="project-actions">
+                            <a href="#" class="btn btn-cyan">[ VIEW MISSION ]</a>
+                            <a href="#" class="btn btn-purple">[ SOURCE CODE ]</a>
+                        </div>
+                    </div>
+
+                    <!-- Project 2 -->
+                    <div class="glass-panel project-card">
+                        <h3 class="project-title orbitron">HASSLEFREEPAY</h3>
+                        <div class="project-meta">
+                            <div class="meta-row"><span>CLASS:</span> <span>FINANCIAL STATION</span></div>
+                            <div class="meta-row"><span>STATUS:</span> <span>ACTIVE <span class="status-dot"></span></span></div>
+                            <div class="meta-row"><span>SECTOR:</span> <span>COLOMBIA FINTECH</span></div>
+                        </div>
+                        <div class="project-tech">React · Django · PostgreSQL · Belvo API</div>
+                        <p class="project-desc">Digital wallet with multi-bank aggregation. Connects Bancolombia, Nequi and Daviplata through a unified interface.</p>
+                        <div class="project-actions">
+                            <a href="#" class="btn btn-cyan">[ VIEW MISSION ]</a>
+                            <a href="#" class="btn btn-purple">[ SOURCE CODE ]</a>
+                        </div>
+                    </div>
+
+                    <!-- Project 3 -->
+                    <div class="glass-panel project-card">
+                        <h3 class="project-title orbitron">FE VIVA</h3>
+                        <div class="project-meta">
+                            <div class="meta-row"><span>CLASS:</span> <span>COMMUNITY NODE</span></div>
+                            <div class="meta-row"><span>STATUS:</span> <span>ACTIVE <span class="status-dot"></span></span></div>
+                            <div class="meta-row"><span>SECTOR:</span> <span>FAITH · TECH</span></div>
+                        </div>
+                        <div class="project-tech">Next.js · Tailwind · Pusher · PostgreSQL</div>
+                        <p class="project-desc">Bible reading platform with communities, prayer requests, reading plans and real-time pastoral dashboards.</p>
+                        <div class="project-actions">
+                            <a href="#" class="btn btn-cyan">[ VIEW MISSION ]</a>
+                            <a href="#" class="btn btn-purple">[ SOURCE CODE ]</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 4: ABOUT (AI ANALYSIS) -->
+            <section id="about">
+                <div class="section-header">
+                    <div class="tag orbitron">[ AI ANALYSIS ]</div>
+                    <h2 class="orbitron">SUBJECT PROFILE DATABASE</h2>
+                </div>
+
+                <div class="glass-panel ai-readout-panel" id="ai-panel">
+                    <div class="ai-content">
+                        <!-- Content injected via JS for typewriter effect -->
+                    </div>
+                    <span class="ai-cursor"></span>
+                </div>
+            </section>
+
+            <!-- SECTION 5: CONTACT -->
+            <section id="contact" class="transmission-center">
+                <div class="section-header" style="text-align: center;">
+                    <div class="tag orbitron">[ TRANSMISSION CENTER ]</div>
+                    <h2 class="orbitron">OPEN COMMUNICATION CHANNEL</h2>
+                </div>
+
+                <div class="glass-panel contact-form">
+                    <form id="comm-form">
+                        <div class="form-row">
+                            <label for="name">TRANSMISSION ORIGIN (Name)</label>
+                            <input type="text" id="name" required autocomplete="off">
+                        </div>
+                        <div class="form-row" style="margin-top: 24px;">
+                            <label for="email">SIGNAL FREQUENCY (Email)</label>
+                            <input type="email" id="email" required autocomplete="off">
+                        </div>
+                        <div class="form-row" style="margin-top: 24px;">
+                            <label for="message">MESSAGE PAYLOAD</label>
+                            <textarea id="message" rows="4" required></textarea>
+                        </div>
+                        
+                        <div class="submit-container">
+                            <span class="sys-msg" id="form-msg">SIGNAL ACQUIRED...</span>
+                            <button type="submit" class="btn btn-cyan">[ TRANSMIT MESSAGE → ]</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="social-links">
+                    <a href="#">[ ↗ GITHUB ]</a>
+                    <a href="#">[ ↗ LINKEDIN ]</a>
+                    <a href="mailto:contact@danielhenriquez.dev">[ ↗ EMAIL ]</a>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- MAIN LOGIC -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            // 1. BOOT SEQUENCE
+            const bootScreen = document.getElementById('boot-screen');
+            const lines = [
+                document.getElementById('boot-1'),
+                document.getElementById('boot-2'),
+                document.getElementById('boot-3'),
+                document.getElementById('boot-4')
+            ];
+            
+            let delay = 0;
+            lines.forEach((line, index) => {
+                setTimeout(() => {
+                    line.style.opacity = '1';
+                }, delay);
+                delay += 600;
+            });
+
+            setTimeout(() => {
+                bootScreen.style.opacity = '0';
+                setTimeout(() => {
+                    bootScreen.style.display = 'none';
+                }, 1000);
+            }, delay + 500);
+
+            // 2. STAR PARTICLES
+            const starsContainer = document.getElementById('stars-container');
+            const numStars = 100;
+            const fragment = document.createDocumentFragment();
+
+            for (let i = 0; i < numStars; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                // Random position
+                star.style.left = `${Math.random() * 100}vw`;
+                star.style.top = `${Math.random() * 100}vh`;
+                // Random size (1px to 3px)
+                const size = Math.random() * 2 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                // Random animation duration (2s to 6s)
+                star.style.animationDuration = `${Math.random() * 4 + 2}s`;
+                // Random opacity
+                star.style.opacity = Math.random();
+                
+                fragment.appendChild(star);
+            }
+            starsContainer.appendChild(fragment);
+
+            // 3. NAVIGATION (Smooth scroll & active state)
+            const navBtns = document.querySelectorAll('.nav-btn');
+            const sections = document.querySelectorAll('section');
+
+            navBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetId = btn.getAttribute('data-target');
+                    document.getElementById(targetId).scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.5
+            };
+
+            const sectionObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navBtns.forEach(btn => btn.classList.remove('active'));
+                        const activeBtn = document.querySelector(`.nav-btn[data-target="${entry.target.id}"]`);
+                        if (activeBtn) activeBtn.classList.add('active');
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(sec => sectionObserver.observe(sec));
+
+            // 4. SKILLS ANIMATION
+            const skillsObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const bar = entry.target;
+                        const targetWidth = bar.getAttribute('data-progress');
+                        bar.style.width = targetWidth;
+                        observer.unobserve(bar); // Animate only once
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            document.querySelectorAll('.skill-bar-fill').forEach(bar => {
+                skillsObserver.observe(bar);
+            });
+
+            // 5. AI ANALYSIS TYPEWRITER EFFECT
+            const aiRawText = `INITIATING SUBJECT ANALYSIS...
+
+<span class="ai-label">IDENTIFIER:</span>      DANIEL HENRIQUEZ
+<span class="ai-label">CLASSIFICATION:</span>  FULL STACK ENGINEER
+<span class="ai-label">ORIGIN:</span>          CARTAGENA, COLOMBIA
+<span class="ai-label">INSTITUTION:</span>     TECNOLÓGICO COMFENALCO
+<span class="ai-label">SPECIALIZATION:</span>  SYSTEMS ENGINEERING (9th SEMESTER)
+
+BEHAVIORAL PATTERNS:
+<div class="ai-divider">────────────────────────────────────────────────</div>
+→ Builds production SaaS platforms from scratch
+→ Combines backend architecture with product vision
+→ Active in fintech, edtech and faith-tech verticals
+→ Operates autonomous AI coding agent pipelines
+→ CTO and backend lead at HassleFreePay
+
+CURRENT MISSION STATUS:
+<div class="ai-divider">────────────────────────────────────────────────</div>
+<span class="ai-label">PRIMARY:</span>    ALDEOR restaurant SaaS (MVP → Scale)
+<span class="ai-label">SECONDARY:</span>  HassleFreePay multi-bank integration
+<span class="ai-label">TERTIARY:</span>   Fe Viva real-time community platform
+
+ASSESSMENT: HIGH-VALUE OPERATOR
+CLEARANCE:  DELTA-7 ████████ GRANTED`;
+
+            const aiLines = aiRawText.split('\n');
+            const aiContainer = document.querySelector('.ai-content');
+            let typingStarted = false;
+
+            const typeWriter = async () => {
+                for (let i = 0; i < aiLines.length; i++) {
+                    const lineDiv = document.createElement('div');
+                    lineDiv.innerHTML = aiLines[i] || '<br>'; // Preserve empty lines
+                    aiContainer.appendChild(lineDiv);
+                    
+                    // Delay between lines (quicker for empty lines)
+                    await new Promise(r => setTimeout(r, aiLines[i] ? 150 : 50));
+                }
+            };
+
+            const aiSectionObserver = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting && !typingStarted) {
+                    typingStarted = true;
+                    typeWriter();
+                }
+            }, { threshold: 0.5 });
+            
+            aiSectionObserver.observe(document.getElementById('about'));
+
+            // 6. CONTACT FORM SIMULATION
+            const form = document.getElementById('comm-form');
+            const formMsg = document.getElementById('form-msg');
+            const submitBtn = form.querySelector('button[type="submit"]');
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // UX Animation
+                submitBtn.style.opacity = '0.5';
+                submitBtn.disabled = true;
+                
+                formMsg.style.color = "var(--cyan)";
+                formMsg.style.opacity = '1';
+                formMsg.innerText = "SIGNAL ACQUIRED...";
+
+                setTimeout(() => {
+                    formMsg.innerText = "ENCODING PAYLOAD...";
+                    
+                    setTimeout(() => {
+                        formMsg.style.color = "#00ff88"; // Green success
+                        formMsg.innerText = "TRANSMISSION SUCCESSFUL ✓";
+                        form.reset();
+                        
+                        setTimeout(() => {
+                            formMsg.style.opacity = '0';
+                            submitBtn.style.opacity = '1';
+                            submitBtn.disabled = false;
+                        }, 3000);
+                        
+                    }, 1000);
+                }, 1000);
+            });
+
+        });
+    </script>
+</body>
+</html>

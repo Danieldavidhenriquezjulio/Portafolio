@@ -1,0 +1,42 @@
+---
+import profilePic from "../assets/ImagenPeril.png";
+---
+
+<nav class="sidebar">
+  <a href="#" class="sidebar-logo" aria-label="Home">
+    <img
+      src={profilePic.src}
+      alt="Daniel Henriquez"
+      class="sidebar-profile-img"
+    />
+  </a>
+
+  <button class="nav-btn active" data-target="hero" aria-label="Orbital Core">
+    <i class="ti ti-planet" aria-hidden="true"></i>
+    <div class="nav-tooltip">ORBITAL CORE</div>
+  </button>
+  <button class="nav-btn" data-target="skills" aria-label="System Status">
+    <i class="ti ti-cpu" aria-hidden="true"></i>
+    <div class="nav-tooltip">SYSTEM STATUS</div>
+  </button>
+  <button class="nav-btn" data-target="projects" aria-label="Mission Database">
+    <i class="ti ti-satellite" aria-hidden="true"></i>
+    <div class="nav-tooltip">MISSION DATABASE</div>
+  </button>
+  <button class="nav-btn" data-target="experience" aria-label="Mission Log">
+    <i class="ti ti-timeline-event-text" aria-hidden="true"></i>
+    <div class="nav-tooltip">MISSION LOG</div>
+  </button>
+  <button class="nav-btn" data-target="about" aria-label="AI Analysis">
+    <i class="ti ti-database" aria-hidden="true"></i>
+    <div class="nav-tooltip">AI ANALYSIS</div>
+  </button>
+  <button
+    class="nav-btn"
+    data-target="contact"
+    aria-label="Transmission Center"
+  >
+    <i class="ti ti-antenna" aria-hidden="true"></i>
+    <div class="nav-tooltip">TRANSMISSION CENTER</div>
+  </button>
+</nav>

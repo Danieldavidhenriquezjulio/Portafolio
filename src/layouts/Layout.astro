@@ -1,0 +1,75 @@
+---
+import { ViewTransitions } from "astro:transitions";
+import "../styles/global.css";
+const { title } = Astro.props;
+
+const siteName = "Daniel Henriquez | Full Stack Engineer & CTO";
+const description = "Full Stack Engineer & CTO building production SaaS. Shipped Fe Viva, Aldeor, HassleFreePay. Next.js · NestJS · PostgreSQL. Open to remote opportunities.";
+const ogImage = "/og-image.png";
+const siteUrl = "https://danieldhj.dev"; // ← Cambia a tu dominio real
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+
+    <!-- SEO Meta -->
+    <meta name="description" content={description} />
+    <meta name="author" content="Daniel Henriquez" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph (LinkedIn, Facebook, WhatsApp) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title || siteName} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:url" content={siteUrl} />
+    <meta property="og:site_name" content={siteName} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title || siteName} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tabler Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"
+    />
+
+    <!-- View Transitions -->
+    <ViewTransitions />
+
+    <!-- Google Analytics -->
+    <!-- ⚠️ Reemplaza G-XXXXXXXXXX con tu Measurement ID de Google Analytics -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=GTM-5N6WZVZZ"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'GTM-5N6WZVZZ');
+    </script>
+  </head>
+  <body>
+    <slot />
+
+    <script is:inline src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script is:inline src="/scripts/main.js"></script>
+  </body>
+</html>

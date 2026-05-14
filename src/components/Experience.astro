@@ -1,0 +1,240 @@
+---
+
+---
+
+<section id="experience">
+  <div class="section-header">
+    <div class="tag orbitron">[ MISSION LOG ]</div>
+    <h2 class="orbitron">OPERATIONAL HISTORY</h2>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-line"></div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot timeline-dot-primary"></div>
+      <div class="glass-panel timeline-card">
+        <div class="timeline-header">
+          <div class="timeline-role">
+            <h3 class="orbitron">CTO & LEAD ENGINEER</h3>
+            <span class="timeline-company">Fe Viva</span>
+          </div>
+          <span class="timeline-date orbitron">2024 — PRESENT</span>
+        </div>
+        <p class="timeline-desc">Leading full-stack development of a faith-tech platform with real-time community features, pastoral dashboards, and reading plans. Architecting with Next.js, Prisma, and PostgreSQL.</p>
+        <div class="timeline-tags">
+          <span class="tech-tag">Next.js</span>
+          <span class="tech-tag">Prisma</span>
+          <span class="tech-tag">PostgreSQL</span>
+          <span class="tech-tag">Real-time</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="glass-panel timeline-card">
+        <div class="timeline-header">
+          <div class="timeline-role">
+            <h3 class="orbitron">FULL STACK DEVELOPER</h3>
+            <span class="timeline-company">Aldeor</span>
+          </div>
+          <span class="timeline-date orbitron">2024 — PRESENT</span>
+        </div>
+        <p class="timeline-desc">Building a multi-tenant restaurant management SaaS with DIAN electronic invoicing, real-time order processing, and AI-powered inventory management for the LATAM market.</p>
+        <div class="timeline-tags">
+          <span class="tech-tag">NestJS</span>
+          <span class="tech-tag">Redis</span>
+          <span class="tech-tag">BullMQ</span>
+          <span class="tech-tag">PostgreSQL</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="glass-panel timeline-card">
+        <div class="timeline-header">
+          <div class="timeline-role">
+            <h3 class="orbitron">FULL STACK DEVELOPER</h3>
+            <span class="timeline-company">HassleFreePay</span>
+          </div>
+          <span class="timeline-date orbitron">2024</span>
+        </div>
+        <p class="timeline-desc">Developed a fintech digital wallet aggregating multiple Colombian banks (Bancolombia, Nequi, Daviplata) through a unified interface using Belvo API.</p>
+        <div class="timeline-tags">
+          <span class="tech-tag">React</span>
+          <span class="tech-tag">Django</span>
+          <span class="tech-tag">Belvo API</span>
+          <span class="tech-tag">PostgreSQL</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="glass-panel timeline-card">
+        <div class="timeline-header">
+          <div class="timeline-role">
+            <h3 class="orbitron">SOFTWARE DEV TECHNOLOGIST</h3>
+            <span class="timeline-company">Tecnológico Comfenalco</span>
+          </div>
+          <span class="timeline-date orbitron">2021 — 2024</span>
+        </div>
+        <p class="timeline-desc">Graduated as Software Development Technologist. Currently pursuing Systems Engineering (9th semester). Foundation in software architecture, databases, and algorithms.</p>
+        <div class="timeline-tags">
+          <span class="tech-tag">Systems Engineering</span>
+          <span class="tech-tag">Software Architecture</span>
+          <span class="tech-tag">Databases</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .timeline {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .timeline-line {
+    position: absolute;
+    left: 18px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--cyan), var(--purple), transparent);
+    z-index: 0;
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-left: 56px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s ease;
+  }
+
+  .timeline-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .timeline-dot {
+    position: absolute;
+    left: 10px;
+    top: 28px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--bg-deep);
+    border: 2px solid var(--cyan);
+    z-index: 2;
+    box-shadow: 0 0 12px rgba(0, 217, 255, 0.3);
+  }
+
+  .timeline-dot-primary {
+    border-color: var(--purple);
+    box-shadow: 0 0 12px rgba(123, 97, 255, 0.4);
+    background: rgba(123, 97, 255, 0.2);
+  }
+
+  .timeline-dot::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border-radius: 50%;
+    background: var(--cyan);
+    animation: pulse-cyan 2s infinite;
+  }
+
+  .timeline-dot-primary::after {
+    background: var(--purple);
+    animation: pulse-purple 2s infinite;
+  }
+
+  .timeline-card {
+    padding: 28px;
+    transition: all 0.3s ease;
+  }
+
+  .timeline-card:hover {
+    transform: translateX(6px);
+    border-color: rgba(0, 217, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 217, 255, 0.08);
+  }
+
+  .timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    gap: 16px;
+  }
+
+  .timeline-role h3 {
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: var(--cyan);
+    margin-bottom: 4px;
+  }
+
+  .timeline-company {
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+  }
+
+  .timeline-date {
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    opacity: 0.6;
+    white-space: nowrap;
+    padding-top: 4px;
+  }
+
+  .timeline-desc {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--text-primary);
+    opacity: 0.8;
+    margin-bottom: 16px;
+  }
+
+  .timeline-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  @media (max-width: 640px) {
+    .timeline-header {
+      flex-direction: column;
+      gap: 6px;
+    }
+    .timeline-card {
+      padding: 20px;
+    }
+  }
+</style>
+
+<script>
+  // Scroll reveal for timeline items
+  const timelineObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.timeline-item').forEach(item => {
+    timelineObs.observe(item);
+  });
+</script>

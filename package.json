@@ -1,0 +1,19 @@
+{
+  "name": "orbital-portfolio",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "deploy": "gh-pages -d dist --no-history"
+  },
+  "dependencies": {
+    "astro": "^4.8.0"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.3.0"
+  }
+}
