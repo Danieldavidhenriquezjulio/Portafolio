@@ -365,6 +365,7 @@ section {
 
 .hero-left {
     flex: 1;
+    min-width: 0;
     z-index: 2;
 }
 
@@ -413,6 +414,7 @@ section {
 .hero-ctas {
     display: flex;
     gap: 16px;
+    flex-wrap: wrap;
 }
 
 .hero-socials {
@@ -1089,6 +1091,34 @@ section {
 
     section {
         padding: 60px 5%;
+    }
+
+    #hero {
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .hero-left {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .hero-left h1 {
+        max-width: 100%;
+        font-size: clamp(30px, 9vw, 42px);
+        letter-spacing: 2px;
+        overflow-wrap: anywhere;
+    }
+
+    .hero-ctas {
+        width: 100%;
+        max-width: 100%;
+        align-items: stretch;
+    }
+
+    .hero-ctas .btn {
+        max-width: 100%;
+        overflow-wrap: anywhere;
     }
 
     .hero-right {

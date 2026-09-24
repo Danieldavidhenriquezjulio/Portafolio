@@ -100,9 +100,10 @@ document.addEventListener("DOMContentLoaded", () => {
 <span class="ai-label">IDENTIFIER:</span>      DANIEL DAVID HENRIQUEZ JULIO
 <span class="ai-label">ROLE:</span>            FULL STACK ENGINEER · CTO
 <span class="ai-label">LOCATION:</span>        CARTAGENA, COLOMBIA (REMOTE-READY)
-<span class="ai-label">STACK:</span>           NEXT.JS · NESTJS · REACT · DJANGO · POSTGRESQL
-<span class="ai-label">EDUCATION:</span>       SYSTEMS ENGINEERING – TECNOLÓGICO COMFENALCO
-<span class="ai-label">DEGREE:</span>          SOFTWARE DEVELOPMENT TECHNOLOGIST (GRADUATED)
+<span class="ai-label">STACK:</span>           NEXT.JS · NESTJS · REACT · DJANGO · POSTGRESQL · GO (LEARNING)
+<span class="ai-label">CLOUD:</span>           VERCEL (BASIC) · AZURE (FUNDAMENTALS)
+<span class="ai-label">EDUCATION:</span>       SYSTEMS ENGINEERING – STARTED 2022
+<span class="ai-label">DEGREE:</span>          TECHNOLOGY IN SOFTWARE DEVELOPMENT (GRADUATED)
 
 CORE COMPETENCIES:
 <div class="ai-divider">────────────────────────────────────────────────</div>
@@ -202,4 +203,3 @@ CLEARANCE: ALPHA-1 ████████ GRANTED`;
     });
 
 });
-
